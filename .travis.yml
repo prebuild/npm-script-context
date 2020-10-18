@@ -11,12 +11,15 @@ node_js:
   - 14
 
 script:
-  - pushd fixture/as-github-dependency
-  - npm i
+  - pushd fixture/self-as-github-dependency
+  - npm i --loglevel=info
   - popd
   - npm pack
-  - pushd fixture/as-tarball-dependency
-  - npm i
+  - pushd fixture/self-as-tarball-dependency
+  - npm i --loglevel=info
+  - popd
+  - pushd fixture/consumer-as-github-dependency
+  - npm i --loglevel=info
   - popd
 
 jobs:

@@ -7,6 +7,6 @@
     "install": "echo from-app && npm-script-context"
   },
   "dependencies": {
-    "npm-script-context": "file:../../npm-script-context-0.0.0.tgz"
+    "npm-script-context": "file:../../npm-script-context-0.0.1.tgz"
   }
 }
