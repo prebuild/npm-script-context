@@ -10,12 +10,19 @@ node_js:
   - 12
   - 14
 
+script:
+  - cd fixture/as-github-dependency && npm i
+
 jobs:
   include:
     - name: npm 7
       os: linux
       node_js: 14
       before_install: npm i npm@7 -g
+    - name: lint
+      os: linux
+      node_js: 14
+      script: npm t
 
 notifications:
   email: false
