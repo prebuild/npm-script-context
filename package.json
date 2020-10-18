@@ -9,7 +9,7 @@
   "bin": "./cli.js",
   "scripts": {
     "test": "standard && depcheck",
-    "install": "node cli.js"
+    "install": "echo from-self && node cli.js"
   },
   "dependencies": {
     "detect-libc": "^1.0.3",

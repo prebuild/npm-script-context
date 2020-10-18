@@ -7,6 +7,6 @@
     "install": "echo from-app && npm-script-context"
   },
   "dependencies": {
-    "npm-script-context": "github:prebuild/npm-script-context"
+    "npm-script-context": "file:../../npm-script-context-0.0.0.tgz"
   }
 }
