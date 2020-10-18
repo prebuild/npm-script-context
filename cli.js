@@ -2,12 +2,11 @@
 'use strict'
 
 const pm = require('which-pm-runs')
-const findRoot = require('find-root')
 const detectLibc = require('detect-libc')
 const origin = require('remote-origin-url')
 const ghurl = require('github-url-from-git')
 const napi = require('napi-build-utils')
-const isForkPr = require('is-fork-pr')
+const ifr = require('is-fork-pr')
 const escapeStringRe = require('escape-string-regexp')
 const os = require('os')
 const fs = require('fs')
@@ -15,7 +14,7 @@ const path = require('path')
 const hasOwnProperty = Object.prototype.hasOwnProperty
 
 const data = {
-  pm: optional(pm),
+  pm: optional(pm) || null,
   npm: {
     env: mask(
       filter(process.env, (k) => /^npm_/i.test(k) && !/^npm_config__/i.test(k)),
@@ -45,11 +44,11 @@ const data = {
     cwd: process.cwd(),
     config: process.config,
     versions: process.versions,
-    uid: optional(() => process.getuid()),
-    gid: optional(() => process.getgid()),
-    egid: optional(() => process.getegid()),
-    euid: optional(() => process.geteuid()),
-    groups: optional(() => process.getgroups())
+    uid: optional(process.getuid, process),
+    gid: optional(process.getgid, process),
+    egid: optional(process.getegid, process),
+    euid: optional(process.geteuid, process),
+    groups: optional(process.getgroups, process)
   },
   streams: {
     stdin: { isTTY: process.stdin.isTTY },
@@ -57,13 +56,13 @@ const data = {
     stderr: { isTTY: process.stderr.isTTY }
   },
   os: {
-    type: optional(() => os.type()),
-    release: optional(() => os.release()),
-    version: optional(() => os.version()),
-    hostname: optional(() => os.hostname()),
-    tmpdir: optional(() => os.tmpdir()),
-    homedir: optional(() => os.homedir()),
-    userInfo: optional(() => os.userInfo())
+    type: optional(os.type, os),
+    release: optional(os.release, os),
+    version: optional(os.version, os),
+    hostname: optional(os.hostname, os),
+    tmpdir: optional(os.tmpdir, os),
+    homedir: optional(os.homedir, os),
+    userInfo: optional(os.userInfo, os)
   },
   libc: {
     family: detectLibc.family || null,
@@ -115,10 +114,11 @@ function mask (input, masks) {
   return input
 }
 
-function optional (fn) {
+function optional (fn, thisArg) {
   try {
-    return fn()
-  } catch {
+    if (typeof fn === 'function') return fn.call(thisArg)
+  } catch (err) {
+    console.error(err)
     return null
   }
 }
@@ -148,29 +148,32 @@ function replacer () {
 }
 
 function packageInfo () {
-  const result = { root: null, git: null, path: null, pkg: null }
+  const result = { path: null, pkg: null }
 
-  try {
-    const root = findRoot()
-    const gitdir = path.join(root, '.git')
+  if (process.env.npm_package_json) { // npm 7
+    result.path = process.env.npm_package_json
+  } else {
+    result.path = path.resolve('package.json')
+  }
 
-    result.root = root
-    result.git = fs.existsSync(gitdir) ? gitdir : null
-    result.path = path.join(root, 'package.json')
-    result.pkg = JSON.parse(fs.readFileSync(result.path, 'utf8'))
-  } catch {}
+  if (result.path) {
+    try {
+      result.pkg = JSON.parse(fs.readFileSync(result.path, 'utf8'))
+    } catch {}
+  }
 
   return result
 }
 
-function gitInfo (cwd) {
+function gitInfo () {
   const result = {}
+  const gitdir = path.resolve('.git')
 
-  // Don't pass cwd for now (jonschlinkert/parse-git-config#13)
-  result.origin = optional(() => origin.sync(/* cwd */))
+  result.gitdir = fs.existsSync(gitdir) ? gitdir : null
+  result.origin = optional(origin.sync, origin)
 
   if (result.origin) {
-    result.github_url = optional(() => ghurl(origin))
+    result.github_url = optional(() => ghurl(result.origin))
   }
 
   return result
@@ -181,8 +184,12 @@ function ciInfo () {
     return null
   }
 
+  const isForkPr = ifr.isForkPr()
+  const secureEnv = !isForkPr && process.env.TRAVIS_SECURE_ENV_VARS !== 'false'
+
   return {
-    name: optional(() => isForkPr.getCiName()),
-    is_fork_pr: optional(() => isForkPr.isForkPr())
+    name: ifr.getCiName(),
+    is_fork_pr: isForkPr,
+    secure_env: secureEnv
   }
 }

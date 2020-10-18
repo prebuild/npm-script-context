@@ -9,13 +9,11 @@
   "bin": "./cli.js",
   "scripts": {
     "test": "standard && depcheck",
-    "install": "node cli.js",
-    "postinstall": "node cli.js"
+    "install": "node cli.js"
   },
   "dependencies": {
     "detect-libc": "^1.0.3",
     "escape-string-regexp": "^4.0.0",
-    "find-root": "^1.1.0",
     "github-url-from-git": "^1.5.0",
     "is-fork-pr": "^2.5.0",
     "napi-build-utils": "^1.0.2",
