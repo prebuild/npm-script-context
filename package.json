@@ -1,6 +1,6 @@
 {
   "name": "npm-script-context",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Print environment, runtime, platform & more in npm scripts",
   "license": "MIT",
   "files": [
