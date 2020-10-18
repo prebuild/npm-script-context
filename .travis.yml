@@ -11,7 +11,9 @@ node_js:
   - 14
 
 script:
-  - cd fixture/as-github-dependency && npm i
+  - pushd fixture/as-github-dependency
+  - npm i --loglevel=info
+  - popd
 
 jobs:
   include:
