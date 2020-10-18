@@ -1,0 +1,46 @@
+{
+  "name": "npm-script-context",
+  "version": "0.0.0",
+  "description": "Print environment, runtime, platform & more in npm scripts",
+  "license": "MIT",
+  "files": [
+    "cli.js"
+  ],
+  "bin": "./cli.js",
+  "scripts": {
+    "test": "standard && depcheck",
+    "preinstall": "node cli.js",
+    "install": "node cli.js",
+    "postinstall": "node cli.js"
+  },
+  "dependencies": {
+    "detect-libc": "^1.0.3",
+    "escape-string-regexp": "^4.0.0",
+    "find-root": "^1.1.0",
+    "github-url-from-git": "^1.5.0",
+    "is-fork-pr": "^2.5.0",
+    "napi-build-utils": "^1.0.2",
+    "remote-origin-url": "^2.0.0",
+    "which-pm-runs": "^1.0.0"
+  },
+  "devDependencies": {
+    "depcheck": "^1.2.0",
+    "standard": "^14.3.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prebuild/npm-script-context.git"
+  },
+  "homepage": "https://github.com/prebuild/npm-script-context",
+  "keywords": [
+    "prebuild",
+    "build",
+    "npm",
+    "script",
+    "install",
+    "environment"
+  ],
+  "engines": {
+    "node": ">=10"
+  }
+}
