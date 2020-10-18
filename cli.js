@@ -11,6 +11,7 @@ const escapeStringRe = require('escape-string-regexp')
 const os = require('os')
 const fs = require('fs')
 const path = require('path')
+const crypto = require('crypto')
 const hasOwnProperty = Object.prototype.hasOwnProperty
 
 const data = {
@@ -85,7 +86,20 @@ const data = {
   }
 }
 
-console.log(JSON.stringify(data, replacer(), 2))
+const json = JSON.stringify(data, replacer(), 2)
+console.log(json)
+
+if (process.env.SCRIPT_CONTEXT_OUTPUT_DIR) {
+  const root = process.env.TRAVIS_BUILD_DIR || '.'
+  const dir = path.resolve(root, process.env.SCRIPT_CONTEXT_OUTPUT_DIR)
+  const random = crypto.randomBytes(3).toString('hex')
+  const ids = [Date.now(), path.basename(process.cwd()), data.pkg.pkg && data.pkg.pkg.name, random]
+  const id = ids.map(s => s && String(s).replace(/[^a-z0-9-]/gi, '')).filter(Boolean).join('_')
+  const filename = path.join(dir, id + '.json')
+
+  fs.mkdirSync(dir, { recursive: true })
+  fs.writeFileSync(filename, json)
+}
 
 function filter (input, include) {
   const output = {}
