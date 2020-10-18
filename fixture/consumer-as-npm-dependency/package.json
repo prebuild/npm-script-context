@@ -1,0 +1,9 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "test",
+  "private": true,
+  "dependencies": {
+    "npm-script-context-consumer": "*"
+  }
+}

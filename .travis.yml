@@ -18,6 +18,9 @@ script:
   - pushd fixture/self-as-tarball-dependency
   - npm i --loglevel=info
   - popd
+  - pushd fixture/consumer-as-npm-dependency
+  - npm i --loglevel=info
+  - popd
   - pushd fixture/consumer-as-github-dependency
   - npm i --loglevel=info
   - popd
