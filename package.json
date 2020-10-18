@@ -9,7 +9,6 @@
   "bin": "./cli.js",
   "scripts": {
     "test": "standard && depcheck",
-    "preinstall": "node cli.js",
     "install": "node cli.js",
     "postinstall": "node cli.js"
   },
