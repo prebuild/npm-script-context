@@ -1,10 +1,12 @@
 # npm-script-context
 
+> [!IMPORTANT]
+> This module is deprecated and no longer maintained.
+
 **Print environment, runtime, platform & more in npm scripts.**
 
 [![npm status](http://img.shields.io/npm/v/npm-script-context.svg)](https://www.npmjs.org/package/npm-script-context)
 [![node](https://img.shields.io/node/v/npm-script-context.svg)](https://www.npmjs.org/package/npm-script-context)
-[![Travis](https://img.shields.io/travis/com/prebuild/npm-script-context.svg)](https://travis-ci.com/prebuild/npm-script-context)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Usage
